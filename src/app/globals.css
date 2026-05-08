@@ -1,26 +1,83 @@
+
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --gold: #d4af37;
+  --gold-light: #f1d592;
+  --gold-dark: #b8860b;
+  --gold-glow: rgba(212, 175, 55, 0.3);
+  --background: #050507;
+  --foreground: #ffffff;
+  --card-bg: rgba(15, 15, 20, 0.8);
+  --card-border: rgba(212, 175, 55, 0.2);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-gold: var(--gold);
+  --color-gold-glow: var(--gold-glow);
+  --color-card-bg: var(--card-bg);
+  --color-card-border: var(--card-border);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-image: 
+    radial-gradient(circle at 50% -20%, var(--gold-glow) 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
+  background-attachment: fixed;
+  margin: 0;
+  min-height: 100vh;
 }
+
+@layer components {
+  .glass-card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--card-border);
+    border-radius: 1.5rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 8px 32px 0 var(--gold-glow);
+    transform: translateY(-2px);
+  }
+
+  .text-gold {
+    color: var(--gold);
+    background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 5px var(--gold-glow));
+  }
+
+  .btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    color: #000;
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .btn-gold:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px var(--gold-glow);
+  }
+
+  .circuit-dots {
+    background-image: radial-gradient(var(--card-border) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+}
+
