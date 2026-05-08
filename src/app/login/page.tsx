@@ -1,17 +1,25 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { LogIn, User, Lock, AlertCircle, Loader } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { LogIn, User, Lock, AlertCircle, Loader, Clock } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionExpired, setSessionExpired] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('expired') === '1') {
+      setSessionExpired(true);
+    }
+  }, [searchParams]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,6 +86,14 @@ export default function LoginPage() {
 
         {/* Formulario */}
         <form onSubmit={handleLogin} className="space-y-4">
+          {/* Session Expired Alert */}
+          {sessionExpired && (
+            <div className="glass-card p-4 bg-yellow-500/10 border border-yellow-500/30 flex items-start gap-3">
+              <Clock size={20} className="text-yellow-400 flex-shrink-0 mt-0.5" />
+              <p className="text-yellow-400 text-sm">Tu sesión expiró por inactividad. Inicia sesión de nuevo.</p>
+            </div>
+          )}
+
           {/* Error Alert */}
           {error && (
             <div className="glass-card p-4 bg-red-500/10 border border-red-500/30 flex items-start gap-3 animate-pulse">
