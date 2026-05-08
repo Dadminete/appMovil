@@ -3,6 +3,14 @@ import { query } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 
 export async function POST(request: Request) {
+  if (!process.env.DATABASE_URL) {
+    console.error('DATABASE_URL is not set');
+    return NextResponse.json(
+      { error: 'Server configuration error: DATABASE_URL missing' },
+      { status: 503 }
+    );
+  }
+
   try {
     const { username, password } = await request.json();
 
@@ -93,9 +101,9 @@ export async function POST(request: Request) {
       },
     });
   } catch (error: any) {
-    console.error('Auth Login Error:', error);
+    console.error('Auth Login Error:', error?.message, error?.code);
     return NextResponse.json(
-      { error: 'Error al iniciar sesión' },
+      { error: 'Error al iniciar sesión', detail: error?.message },
       { status: 500 }
     );
   }
